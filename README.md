@@ -40,35 +40,6 @@ Install dependencies:
 
 `pip install -r requirements.txt`
 
-### Setup - Credentials
-
-Environment variables are used for configuration and credentials through a `.env` file.
-
-Create and populate credentials in a new `.env`:
-
-`cp .env.template .env`
-
-In the new file, remove anything after the `=` and replace with real configuration. For example:
-
-`POSTGRES_HOST=127.0.0.1`
-
-The `.env` file **should not** be committed.  `.gitignore` includes the `.env` to avoid this, but be mindful it may contain
-credentials or configuration that could expose a security risk in a real environment when sharing code.
-
-### Credentials - Create schema user
-
-A user with the ability to create (and drop) a schema (db) is required under the configuration parameter
-`POSTGRES_USER_CREATE_DB_PRIVILEGES` in `.env`, so that the process can automatically create the data store, and drop if
-already exists on subsequent runs.
-
-### Credentials - User to manage tables and read/write
-
-Once the data store schema is available, privileges are dropped to the ability to create tables and read/write data into the store
-under the `DATA_STORE_USER` credentials in `.env`.
-
-The privilege to manipulate the table structures would typically be restricted even further to a distinct user,
-but kept here for simplicity.
-
 ## Run
 
 `python create_tables.py && python etl.py`
