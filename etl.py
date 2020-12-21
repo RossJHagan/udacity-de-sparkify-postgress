@@ -7,11 +7,11 @@ from settings import db_host, data_store_schema, data_store_user, data_store_pas
 
 
 def process_song_file(cur, filepath):
-    """
-    handler function for processing song data into artists and songs in the data store
-    @param cur:
-    @param filepath:
-    @return:
+    """Parses song data logs into songs and artists tables
+
+    Args:
+        cur: psycopg2 cursor
+        filepath: string with file path relative to location the script is executed
     """
     # open song file
     df = pd.read_json(filepath, lines=True)
@@ -28,8 +28,13 @@ def process_song_file(cur, filepath):
 
 
 def process_log_file(cur, filepath):
-    """
-    handler function for processing event log files into the data store
+    """Parses event logs into time, user, and songplay tables
+
+    handler function for processing event logs into tabular data
+
+    Args:
+        cur: psycopg2 cursor
+        filepath: string with file path relative to location the script is executed
     """
     # open log file
     df = pd.read_json(filepath, lines=True)
@@ -67,6 +72,10 @@ def process_log_file(cur, filepath):
         else:
             songid, artistid = None, None
 
+        # when no songid or artistid this data stops being meaningful for our analysis, so not inserted
+        if not songid or not artistid:
+            continue
+
         songplay_data = (
             pd.to_datetime(row.ts, unit='ms'),
             row.userId,
@@ -84,9 +93,16 @@ def process_log_file(cur, filepath):
 
 
 def process_data(cur, conn, filepath, func):
-    """
+    """Process log file data from json files into tables based on given processor func
+
     Accepts a database cursor and connection, and uses the filepath and processor `func` to
     parse the json files into the database
+
+    Args:
+        cur: psycopg2 cursor
+        conn: psycopg2 connection
+        filepath: string with file path relative to location the script is executed
+        func: handler function accepting a cursor and filepath as arguments
     """
     # get all files matching extension from directory
     all_files = []
