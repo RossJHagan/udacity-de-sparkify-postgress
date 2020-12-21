@@ -1,13 +1,8 @@
-import os
-from dotenv import load_dotenv
+db_host = "127.0.0.1"
+db_default_schema = "studentdb"
+db_create_user = "student"
+db_create_pass = "student"
 
-load_dotenv()
-
-db_host = os.getenv("POSTGRES_HOST")
-db_default_schema = os.getenv("POSTGRES_DEFAULT_DB")
-db_create_user = os.getenv("POSTGRES_USER_CREATE_DB_PRIVILEGES")
-db_create_pass = os.getenv("POSTGRES_PASSWORD_CREATE_DB_PRIVILEGES")
-
-data_store_schema = os.getenv("DATA_STORE_SCHEMA")
-data_store_user = os.getenv("DATA_STORE_USER")
-data_store_pass = os.getenv("DATA_STORE_PASSWORD")
+data_store_schema = "sparkifydb"
+data_store_user = "student"
+data_store_pass = "student"
